@@ -5,7 +5,7 @@ import json
 
 # NOTE: Can't have rankby distance and radius in the same request
 
-API_KEY = "AIzaSyAtNORY9ab5WPNEpB8zSEYIeKVAXZFDl5w"
+API_KEY = "REDACTED"
 GOOGLE_MAPS = "https://maps.googleapis.com/maps/api"
 
 
