@@ -5,25 +5,8 @@ import json
 
 # NOTE: Can't have rankby distance and radius in the same request
 
-API_KEY = "REDACTED"
+API_KEY = open("google_api_key.txt", "r").read()
 GOOGLE_MAPS = "https://maps.googleapis.com/maps/api"
-
-
-def main():
-    latitude, longitude = -41.28666552, 174.772996908  # Latitude and Longitude for Wellington, NZ
-    #
-    # request = place_request(latitude, longitude)
-    # place_json = request.json()
-    # next_page_token = place_json["next_page_token"]
-    # results = place_json["results"]
-    #
-    # places_of_interest = generate_places_of_interest(results)
-    #
-    # print(json.dumps(place_json, indent=4, sort_keys=True))
-
-    request = perform_place_request(latitude, longitude)
-    request.close()
-    return
 
 
 def generate_places_of_interest(results):
@@ -41,6 +24,7 @@ def generate_places_of_interest(results):
 
 
 def perform_details_request(place_id):
+    print("Executing request for details on " + place_id)
     return requests.get(GOOGLE_MAPS + "/place/details/json", params={
         "key": API_KEY,
         "place_id": place_id,
@@ -48,18 +32,17 @@ def perform_details_request(place_id):
     })
 
 
-def perform_place_request(latitude, longitude):
+def perform_place_request(latitude, longitude, type):
+    print("Finding all " + type + "(e)s in local area of " + str(latitude) + ", " + str(longitude))
     return requests.get(GOOGLE_MAPS + "/place/nearbysearch/json", params={
         "key": API_KEY,
         "location": str(latitude) + "," + str(longitude),
         # "radius": 1500,
         "rankby": "distance",
-        "type": "restaurant"})  # Don't want popular results; we want random ones
+        "type": type})  # Don't want popular results; we want random ones
 
 
 def print_formatted(result):
     print(json.dumps(result, indent=4, sort_keys=True))
 
 
-if __name__ == "__main__":
-    main()
