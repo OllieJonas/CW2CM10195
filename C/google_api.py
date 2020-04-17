@@ -5,11 +5,11 @@ import json
 
 # NOTE: Can't have rankby distance and radius in the same request
 
-API_KEY = open("google_api_key.txt", "r").read()
+API_KEY = open("google_api_key.txt", "r").read()  # For obvious reasons, this has been redacted.
 GOOGLE_MAPS = "https://maps.googleapis.com/maps/api"
 
 
-# Uses all results to get the places of interest. (filters out the user ratings to be under 30.
+# Uses all results to get the places of interest. (filters out the user ratings to be under 30).
 #
 # NOTE: This is entirely arbitrary; it just helps to remove any larger companies that may have come from abroad, and
 # therefore their website would be based somewhere else. There is no scientific data to support this assumption;
