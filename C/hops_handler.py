@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 import re
 import platform
-test_websites = ["google.co.uk", "yahoo.co.uk"]
+
 UNKNOWN_COUNT_THRESHOLD = 8
 
 
@@ -37,6 +37,8 @@ def execute_traceroute_command(website):
     return result
 
 
+# Returns the syntax for the traceroute command based on OS (Windows has a slightly different format to UNIX-based
+# operating systems.
 def get_traceroute_command_syntax(website):
     if is_windows():
         return ["tracert", "-h", 255, website]
@@ -54,6 +56,8 @@ def sort(results):
     return sorted(results, reverse=True)
 
 
+# Returns a boolean for whether the platform running this script is Windows or not.
+# (Included this because I use both Linux and Windows)
 def is_windows():
     return "Windows" in platform.system()
 
