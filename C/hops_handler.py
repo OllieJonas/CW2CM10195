@@ -11,27 +11,29 @@ def execute_traceroute_command(website):
     result = []
     unknown_count = 0
 
-    process = Popen(get_traceroute_command_syntax(website), stdout=PIPE)  # 255 hops
+    process = Popen(get_traceroute_command_syntax(format_website(website)), stdout=PIPE)  # 255 hops
     print("Executing Traceroute Command for " + website_formatted)
 
     for line in iter(process.stdout.readline, ''):
-        if line == b'' and process.poll() is not None:  # If stream has finished
+        if line == b'' or process.poll() is not None:  # If stream has finished
             break
         else:
             line_str = "".join(chr(x) for x in bytearray(line)).strip("\n")  # Convert byte stream to string
+            line_str_split = line_str.split()
 
-            if "* * *" in line_str:  # Ensures we don't end up with too many unknown hops
-                unknown_count += 1
-                if unknown_count > UNKNOWN_COUNT_THRESHOLD:
-                    process.kill()
-                    print("Error: Traceroute for " + website_formatted + " has been killed - too many unknown hops\n")
-                    return None
+            if len(line_str_split) > 0:
+                if "* * *" in line_str:  # Ensures we don't end up with too many unknown hops
+                    unknown_count += 1
+                    if unknown_count > UNKNOWN_COUNT_THRESHOLD:
+                        process.kill()
+                        print("Traceroute for " + website_formatted + " has been killed - too many unknown hops\n")
+                        return None
 
-            elif line_str.split()[0].isnumeric():  # ie. this is a hop
-                result.append(line_str)
+                elif line_str_split[0].isnumeric():  # ie. this is a hop
+                    result.append(line_str)
 
-            else:  # ie. any other random stuff that the traceroute command prints (don't want this in the list)
-                pass
+                else:  # ie. any other random stuff that the traceroute command prints (don't want this in the list)
+                    pass
 
     print("Completed traceroute for " + website_formatted)
     return result
@@ -41,7 +43,7 @@ def execute_traceroute_command(website):
 # operating systems.
 def get_traceroute_command_syntax(website):
     if is_windows():
-        return ["tracert", "-h", 255, website]
+        return ["tracert", "-h", "255", website]
     else:
         return ["traceroute", "-m", "255", website]
 
@@ -60,6 +62,10 @@ def sort(results):
 # (Included this because I use both Linux and Windows)
 def is_windows():
     return "Windows" in platform.system()
+
+
+if __name__ == "__main__":
+    execute_traceroute_command('http://www.oamaruelim.nz/')
 
 
 
