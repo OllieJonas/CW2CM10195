@@ -42,10 +42,13 @@ Subprocess - Execute the traceroute command and get all output from the console 
 
 <h2> Links </h2>
 
-https://developers.google.com/places/web-service/search
+Please refer to the following links for more information on the Google Maps API:
 
-https://developers.google.com/places/web-service/details
+More information for the Search Request: https://developers.google.com/places/web-service/search
 
-https://developers.google.com/places/web-service/supported_types
+Supported Types for the Search Request: https://developers.google.com/places/web-service/supported_types
+
+More information for the Details Request: https://developers.google.com/places/web-service/details
+
 
 
