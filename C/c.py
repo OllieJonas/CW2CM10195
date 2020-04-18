@@ -1,7 +1,7 @@
 from C import google_api, hops_handler
 
 
-# Main method. Contains logic for script.
+# Main method
 def main():
     websites = []
     results = []
