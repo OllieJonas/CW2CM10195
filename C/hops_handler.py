@@ -1,6 +1,6 @@
 from subprocess import Popen, PIPE
 import re
-
+import platform
 test_websites = ["google.co.uk", "yahoo.co.uk"]
 UNKNOWN_COUNT_THRESHOLD = 8
 
@@ -8,17 +8,17 @@ UNKNOWN_COUNT_THRESHOLD = 8
 # Executes traceroute command for the website given
 def execute_traceroute_command(website):
     website_formatted = format_website(website)  # Remove any unnecessary http stuff in string
-    print("Executing Traceroute Command for " + website_formatted)
     result = []
-    process = Popen(["traceroute", "-m", "255", website_formatted], stdout=PIPE)  # 255 hops
     unknown_count = 0
+
+    process = Popen(get_traceroute_command_syntax(website), stdout=PIPE)  # 255 hops
+    print("Executing Traceroute Command for " + website_formatted)
 
     for line in iter(process.stdout.readline, ''):
         if line == b'' and process.poll() is not None:  # If stream has finished
             break
         else:
             line_str = "".join(chr(x) for x in bytearray(line)).strip("\n")  # Convert byte stream to string
-            print(line_str)
 
             if "* * *" in line_str:  # Ensures we don't end up with too many unknown hops
                 unknown_count += 1
@@ -37,6 +37,13 @@ def execute_traceroute_command(website):
     return result
 
 
+def get_traceroute_command_syntax(website):
+    if is_windows():
+        return ["tracert", "-h", 255, website]
+    else:
+        return ["traceroute", "-m", "255", website]
+
+
 # Removes any http business or anything at the end (eg. https://, http://, .nz?, .nz/)
 def format_website(website):
     return re.split("[/?]", website)[2]
@@ -45,6 +52,12 @@ def format_website(website):
 # Reverses list
 def sort(results):
     return sorted(results, reverse=True)
+
+
+def is_windows():
+    return "Windows" in platform.system()
+
+
 
 
 

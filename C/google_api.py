@@ -5,8 +5,8 @@ import json
 
 # NOTE: Can't have rankby distance and radius in the same request
 
-API_KEY = open("google_api_key.txt", "r").read()  # For obvious reasons, this has been redacted.
-GOOGLE_MAPS = "https://maps.googleapis.com/maps/api"
+API_KEY = open("google_api_key.txt", "r").read()  # For obvious reasons, I haven't pushed my Google API key
+MAPS_URL = "https://maps.googleapis.com/maps/api"
 
 
 # Uses all results to get the places of interest. (filters out the user ratings to be under 30).
@@ -32,7 +32,7 @@ def generate_places_of_interest(results):
 # Executes the details request to the Google API. Only fetches the website.
 def execute_details_request(place_id):
     print("Executing request for details on " + place_id)
-    return requests.get(GOOGLE_MAPS + "/place/details/json", params={
+    return requests.get(MAPS_URL + "/place/details/json", params={
         "key": API_KEY,
         "place_id": place_id,
         "fields": "website"
@@ -42,7 +42,7 @@ def execute_details_request(place_id):
 # Executes the place request to the Google API. Either can find by radius or rankby distance.
 def perform_place_request(latitude, longitude, type):
     print("Finding all " + type + "(e)s in local area of " + str(latitude) + ", " + str(longitude))
-    return requests.get(GOOGLE_MAPS + "/place/nearbysearch/json", params={
+    return requests.get(MAPS_URL + "/place/nearbysearch/json", params={
         "key": API_KEY,
         "location": str(latitude) + "," + str(longitude),
         # "radius": 1500,

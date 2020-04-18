@@ -31,7 +31,10 @@ def main():
 
         if "result" in details_json and "website" in details_json["result"]:  # Parsing Google API JSON Response
             website = details_json['result']['website']
+            print("Found website " + website)
             websites.append(website)
+        else:
+            print("No website found for this ID")
 
     print("Found " + str(len(websites)) + " websites!")
 
