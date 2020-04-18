@@ -43,7 +43,9 @@ Subprocess - Execute the traceroute command and get all output from the console 
 <h2> Links </h2>
 
 https://developers.google.com/places/web-service/search
+
 https://developers.google.com/places/web-service/details
+
 https://developers.google.com/places/web-service/supported_types
 
 
