@@ -17,11 +17,12 @@ def execute_traceroute_command(website):
     for line in iter(process.stdout.readline, ''):
         if line == b'' or process.poll() is not None:  # If stream has finished
             break
+
         else:
             line_str = "".join(chr(x) for x in bytearray(line)).strip("\n")  # Convert byte stream to string
             line_str_split = line_str.split()
 
-            if len(line_str_split) > 0:
+            if len(line_str_split) > 0:  # Fixes Windows bug of returning empty strings
                 if "* * *" in line_str:  # Ensures we don't end up with too many unknown hops
                     unknown_count += 1
                     if unknown_count > UNKNOWN_COUNT_THRESHOLD:
