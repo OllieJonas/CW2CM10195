@@ -32,6 +32,7 @@ R = 6373.0  # Radius of Earth
 distances = []
 
 
+# Main logic, calculates distance between 2 lat/long coords using Haversine formula
 def main():
     count = 1
     bath_lat, bath_long = math.radians(BATH[0]), math.radians(BATH[1])
