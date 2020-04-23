@@ -14,16 +14,18 @@ def main():
         if len(traceroute) > 0:
             total_time = 0
 
-            for line in traceroute:
-                trct_split = line.split("  ")
+            size = len(traceroute)
+            final_hop = traceroute[size - 1].split("  ")
 
-                for word in trct_split:
-                    if " ms" in word:
-                        num = get_ping_from_text(word) / 3
-                        total_time += num
+            for word in final_hop:
+                if " ms" in word:
+                    num = get_ping_from_text(word)
+                    total_time += num
 
-            all_averages.append((count, round(total_time, 3)))
+            all_averages.append((count, round(total_time / 3, 3)))
             count += 1
+
+    print_list(all_averages)
 
 
 def recursion(current_list, index):
@@ -41,9 +43,7 @@ def recursion(current_list, index):
     return recursion(current_list, index + 1)
 
 
-print(all_averages)
-
-
+# I now realise I could have just split this by multiple new lines but hey that's no fun right? :D
 def do_recursion():
     current_index = 0
     size = len(file)
@@ -59,6 +59,11 @@ def do_recursion():
 
 def get_ping_from_text(string):
     return float(string.split()[0])
+
+
+def print_list(items):
+    for item in items:
+        print(item)
 
 
 if __name__ == "__main__":
