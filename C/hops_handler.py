@@ -2,7 +2,7 @@ from subprocess import Popen, PIPE
 import re
 import platform
 
-UNKNOWN_COUNT_THRESHOLD = 8
+UNKNOWN_COUNT_THRESHOLD = 10
 
 
 # Executes traceroute command for the website given
@@ -16,11 +16,14 @@ def execute_traceroute_command(website):
 
     for line in iter(process.stdout.readline, ''):
         if line == b'' or process.poll() is not None:  # If stream has finished
+            result.append(str(len(result)) + website_formatted)
             break
 
         else:
             line_str = "".join(chr(x) for x in bytearray(line)).strip("\n")  # Convert byte stream to string
             line_str_split = line_str.split()
+
+            print(line_str)
 
             if len(line_str_split) > 0:  # Fixes Windows bug of returning empty strings
                 if "* * *" in line_str:  # Ensures we don't end up with too many unknown hops

@@ -2,7 +2,7 @@ import requests
 import json
 
 
-API_KEY = open("google_api_key.txt", "r").read()  # For obvious reasons, I haven't included my Google API key
+API_KEY = "AIzaSyDJINQC6x3Q2U7PmCNcaLyBGd5JX4BTglw"  # For obvious reasons, I haven't included my Google API key
 MAPS_URL = "https://maps.googleapis.com/maps/api"
 
 
@@ -25,6 +25,13 @@ def build_place_request(latitude, longitude, type):
         # "radius": 1500,
         "rankby": "distance",  # Don't want popular results - we want random ones
         "type": type
+    })
+
+
+def build_next_page_place_request(next_page_token):
+    return requests.get(MAPS_URL + "/place/nearbysearch/json", params={
+        "key": API_KEY,
+        "next_page_token": next_page_token
     })
 
 

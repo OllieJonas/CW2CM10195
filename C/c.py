@@ -1,27 +1,39 @@
-from C import google_api, hops_handler
+import google_api
+import hops_handler
+
+coordinates = [
+    (-43.539930, 172.625851),
+]
+
+types = ["cafe", "church", "hindu_temple", "hospital", "mosque",
+         "museum", "pet_store", "restaurant", "synagogue"]
+
+COMMON_WEBSITES = ["www.facebook.com", "www.youtube.com"]
 
 
 # Main method
 def main():
+    places_of_interest = []
     websites = []
     results = []
 
-    latitude, longitude = -45.095234, 170.969653  # Latitude and Longitude for Wellington, NZ
-    type = "church"
+    for coord in coordinates:
+        for place_type in types:
+            place_results = execute_place_request(coord[0], coord[1], place_type)  # Gets all areas of type in the lat,long
+            print("Found " + str(len(place_results)) + " results for " + place_type + "!")
 
-    place_results = execute_place_request(latitude, longitude, type)  # Gets all areas of type in the lat,long
-    print("Found " + str(len(place_results)) + " results!")
+            places_of_interest += generate_places_of_interest(place_results)  # Get places of interest from places in area
 
-    places_of_interest = generate_places_of_interest(place_results)  # Get places of interest from places in area
-    print("Found " + str(len(places_of_interest)) + " places of interest!")
+    print("Found " + str(len(places_of_interest)) + " total places of interest!")
 
     for place in places_of_interest:  # Fetch details from places of interest
         website = get_website_from_place_id(place)
 
-        if website is not None:  # ie. Website exists
+        if website is not None:  # ie. Website exists and is not in common websites
             websites.append(website)
 
     print("Found " + str(len(websites)) + " websites!")
+    print("Websites: " + str(websites))
 
     for website in websites:
         result = hops_handler.execute_traceroute_command(website)  # Execute traceroute for each website
@@ -48,9 +60,14 @@ def get_website_from_place_id(place_id):
     details_request.close()
 
     if "result" in details_json and "website" in details_json["result"]:  # Parsing Google API JSON Response
-        website = details_json['result']['website']
-        print("Found website " + website + "!")
-        return website
+        website = hops_handler.format_website(details_json['result']['website'])
+
+        if website in COMMON_WEBSITES:
+            print("Found a website for this ID, but it is a common one")
+            return None
+        else:
+            print("Found website " + website)
+            return website
     else:
         print("No website found for this ID")
         return None
@@ -63,7 +80,7 @@ def get_website_from_place_id(place_id):
 #
 # Returns a dictionary
 def execute_place_request(latitude, longitude, type):
-    print("Finding all " + type + "(e)s in local area of " + str(latitude) + ", " + str(longitude))
+    print("Finding all of type " + type + " in local area of " + str(latitude) + ", " + str(longitude))
     place_request = google_api.build_place_request(latitude, longitude, type)
     place_json = place_request.json()
     place_request.close()
