@@ -3,12 +3,27 @@ import hops_handler
 
 coordinates = [
     (-43.539930, 172.625851),
+    (-36.880515, 174.764212),  # Auckland, NZ
+    (-37.705834, 176.156247),  # Tauranga, NZ
+    (-43.911300, 171.743724),  # Ashburton, NZ
+    (-44.967361, 168.861239),  # Arrowtown, NZ
+    (-43.554099, 172.554690),  # Christchurck, NZ
+    (-44.437943, 171.211307),  # Timaru, NZ
+    (-45.892379, 170.435681),  # Dunedin, NZ
+    (-46.099897, 168.944212),  # Gore, NZ
+    (-46.304868, 168.382430),  # Invercargill, NZ
+    (-44.008318, 170.486040),  # Lake Tekapo, NZ
+    (-44.699794, 169.132496),  # Wanaka, NZ
+    (-43.632467, 171.645382),  # Methven, NZ
+    (-41.274451, 173.283298),  # Nelson, NZ
+    (-49.066751, 174.070837),  # New Plymouth, NZ
+    (-37.792344, 175.280711)  # Hamilton, NZ
 ]
 
 types = ["cafe", "church", "hindu_temple", "hospital", "mosque",
          "museum", "pet_store", "restaurant", "synagogue"]
 
-COMMON_WEBSITES = ["www.facebook.com", "www.youtube.com"]
+COMMON_WEBSITES = ["www.facebook.com", "www.youtube.com", "m.facebook.com", "ww.bp.com"]
 
 
 # Main method

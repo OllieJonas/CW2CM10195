@@ -2,21 +2,20 @@ from subprocess import Popen, PIPE
 import re
 import platform
 
-UNKNOWN_COUNT_THRESHOLD = 10
+UNKNOWN_COUNT_THRESHOLD = 20
 
 
 # Executes traceroute command for the website given
 def execute_traceroute_command(website):
-    website_formatted = format_website(website)  # Remove any unnecessary http stuff in string
     result = []
     unknown_count = 0
 
-    process = Popen(get_traceroute_command_syntax(format_website(website)), stdout=PIPE)  # 255 hops
-    print("Executing Traceroute Command for " + website_formatted)
+    process = Popen(get_traceroute_command_syntax(website), stdout=PIPE)  # 255 hops
+    print("Executing Traceroute Command for " + website)
 
     for line in iter(process.stdout.readline, ''):
         if line == b'' or process.poll() is not None:  # If stream has finished
-            result.append(str(len(result)) + website_formatted)
+            result.append(str(len(result)) + website)
             break
 
         else:
@@ -30,7 +29,7 @@ def execute_traceroute_command(website):
                     unknown_count += 1
                     if unknown_count > UNKNOWN_COUNT_THRESHOLD:
                         process.kill()
-                        print("Traceroute for " + website_formatted + " has been killed - too many unknown hops\n")
+                        print("Traceroute for " + website + " has been killed - too many unknown hops\n")
                         return None
 
                 elif line_str_split[0].isnumeric():  # ie. this is a hop
@@ -39,7 +38,7 @@ def execute_traceroute_command(website):
                 else:  # ie. any other random stuff that the traceroute command prints (don't want this in the list)
                     pass
 
-    print("Completed traceroute for " + website_formatted)
+    print("Completed traceroute for " + website)
     return result
 
 
@@ -69,7 +68,48 @@ def is_windows():
 
 
 if __name__ == "__main__":
-    execute_traceroute_command('http://www.oamaruelim.nz/')
+    websites = ['www.bp.com', 'theyardchch.nz', 'muffinbreak.co.nz', 'muffinbreak.co.nz', 'www.frobisher.co.nz',
+               'www.bp.com', 'www.majestic.org.nz', 'www.cnmc.org.nz', 'www.stmarysaddington.org',
+               'www.chchstmichaels.org.nz', 'www.jcf.org.nz', 'www.jcf.org.nz', 'samoanaddington.adventist.org.nz',
+               'www.methodist.org.nz', 'thewellnz.org', 'www.cdhb.health.nz', 'www.ultimatecare.co.nz',
+               'ashleyandmartin.co.nz', 'www.macnz.org', 'www.artscentre.org.nz', 'chchhamradio.org.nz',
+               'archives.govt.nz', 'www.k9natural.com', 'www.herculesgazebo.co.nz', 'www.smartcatsstayhome.co.nz',
+               'www.livingreef.co.nz', 'www.furtography.co.nz', 'theyardchch.nz', 'riverside.nz', 'm.facebook.com',
+               'www.shanghaistreetdumplings.co.nz', 'www.chc.org.nz', 'www.karajoz.co.nz', 'www.nightnday.co.nz',
+               'theshelteronline.com', 'www.valleyroad.org.nz', 'www.stbarnabasmounteden.info', 'www.greyfriars.org.nz',
+               'www.emmanuelharvestchurch.com', 'lifenz.org', 'lifenz.org', 'epsombaptistchurch.org.nz',
+               'quaker.org.nz', 'www.nabc.org.nz', 'www.stgeorgesepsom.org.nz', 'www.saintalbans.org.nz',
+               'www.saibabatemple.org.nz', 'www.laparoscopyak.co.nz', 'www.orthoclinic.co.nz',
+               'www.cairnhill-healthcentre.co.nz', 'ahns.co.nz', 'www.entgroup.co.nz',
+               'www.aucklandradiationoncology.co.nz', 'www.kamranzargar.co.nz', 'www.mercybreastclinic.co.nz',
+               'www.healthpoint.co.nz', 'almanar.co.nz', 'www.masjidutsman.org.nz', 'www.aucklandtram.co.nz',
+               'www.ipetstore.co.nz', 'www.moona.store', 'aqua-forest-aquarium-studio.business.site', 'wedeliver.nz',
+               'www.lifeofriley.co.nz', 'www.brodies.nz', 'www.freerangechef.co.nz', 'www.theseafoodcollective.co.nz',
+               'www.dominioneatery.co.nz', 'www.bethshalom.org.nz', 'ahc.org.nz', 'chabad.nz', 'www.bp.com',
+               'www.villaridge.co.nz', 'acktauranga.nz', 'www.presbyterian.org.nz', 'www.equipperschurch.com',
+               'www.methodist.org.nz', 'www.tcbc.org.nz', 'curatechurch.com', 'www.taurangaelim.nz', 'www.mormon.org',
+               'lifezone.church', 'www.lifechurchtga.org.nz', 'www.taurangachurch.org', 'www.salvationarmy.org.nz',
+               'abundantlife.org.nz', 'www.stgeorgesgatepa.com', 'www.redeemerchurch.org.nz',
+               'sanatandharammandir.org.nz', 'www.ultimatecare.co.nz', 'www.canopycancercare.co.nz',
+               'heritagelifecare.co.nz', 'www.chadhealth.co.nz', 'www.healthpoint.co.nz', 'www.thedoctors.co.nz',
+               'www.taurangaeyespecialists.co.nz', 'www.thedoctors.co.nz', 'www.tankjuice.co.nz', 'www.tankjuice.co.nz',
+               'www.plutojuicebar.com', 'www.downtowntauranga.co.nz', 'www.missgees.co.nz',
+               'www.ashburtonbaptist.co.nz', 'jw.org', 'www.methodist.org.nz', 'chchcatholic.nz', 'catholic.org.nz',
+               'www.stpaulsashburton.com', 'www.ashburtonnewlife.co.nz', 'www.gracepresbyterianchurch.org.nz',
+               'vbcofashburton-nz.org', 'www.anglican.org.nz', 'www.stdavidsashburton.org', 'www.mormon.org',
+               'www.terraceview.co.nz', 'heritagelifecare.co.nz', 'www.cdhb.health.nz', 'heritagelifecare.co.nz',
+               'www.simplypetfoods.co.nz', 'facebook.com', 'www.chipshop.co.nz', 'www.stpeters.co.nz',
+               'www.wakatipuchurch.com', 'www.arrowtown.com', 'www.thestitchingpost.co.nz']
+
+    results = []
+    for website in websites:
+
+        print("website " + website)
+        result = execute_traceroute_command(website)
+        if result is not None:
+            results += result
+
+    print(results)
 
 
 
