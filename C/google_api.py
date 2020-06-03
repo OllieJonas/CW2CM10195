@@ -2,7 +2,7 @@ import requests
 import json
 
 
-API_KEY = "AIzaSyDJINQC6x3Q2U7PmCNcaLyBGd5JX4BTglw"  # For obvious reasons, I haven't included my Google API key
+API_KEY = "REDACTED"  # For obvious reasons, I haven't included my Google API key
 MAPS_URL = "https://maps.googleapis.com/maps/api"
 
 
